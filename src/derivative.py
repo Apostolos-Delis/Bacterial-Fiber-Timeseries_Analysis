@@ -40,48 +40,6 @@ def generate_derivatives(ts: [list, np.array], verbose=False) -> pd.DataFrame:
 
     return df
 
-def create_image_directory(verbose=True):
-    """
-    Creates an image directory structured like this:
-    
-    IMAGE_DIR {
-        FILE_1 {
-            FILTER_1.png
-            FILTER_2.png
-            ...
-        }
-        FILE_2 {
-            ...
-        }
-    }
-    
-    Where each png file is a graph of a time series of an individual filter, along with
-    its first and second derivatives.
-
-    :param verbose: bool for whether to print the progress made in creating the images
-    """
-    if not path.isdir(IMAGE_DIR):
-        if verbose:
-            print("Creating Image Directory...")
-        make_directory(IMAGE_DIR)
-
-    # Add the mat files into the queue to be processed
-    for m, mat_file in enumerate(os.listdir(DATA_DIR)):
-        print("Processing file: {0}, file {1}/{2}"
-                .format(mat_file, m+1, len(os.listdir(DATA_DIR))))
-        mat = load_from_mat(mat_file)
-        data = process_mat(mat)
-        image_name = mat_file.split('.')[-2] 
-        make_directory(path.join(IMAGE_DIR, image_name))
-        for i, ts in enumerate(data):
-            ts_name = path.join(IMAGE_DIR, 
-                    path.join(image_name, "filter_{0}.png".format(i)))
-            save_image(ts, ts_name)
-            if verbose and (i+1) % 10 == 0:
-                print("Processing fiber: {0}/{1}"
-                    .format(i+1, len(data)))
-        if verbose: 
-            print("Finished processing {0}...\n".format(mat_file))
 
 def series_threshold(ts, threshold: float = DEFAULT_THRESHOLD, derivative=2) -> bool:
     """

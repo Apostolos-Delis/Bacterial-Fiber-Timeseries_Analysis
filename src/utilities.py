@@ -4,8 +4,12 @@
 import pandas as pd  # For data-frames
 import numpy as np  # Numerical computing
 import matplotlib.pyplot as plt  # Create Plots
-
+import scipy.io as sio  # To load matlab files
+from os import path  # For robust pathing
+import os  # For general os functions
 from sys import stderr  # For Error msges
+
+from constants import DATA_DIR, IMAGE_DIR
 
 def error(output, *args, interupt=False, **kwargs):
     print("\033[0;49;31m{0}\033[0m".format(output), *args, file=stderr **kwargs)
