@@ -45,7 +45,12 @@ def series_threshold(ts, threshold: float = DEFAULT_THRESHOLD, derivative=2) -> 
     """
     Returns true or false based on whether the threshold was exceded by the time series
     """
-    series = ts["derivative{0}".format(derivative)]
+    try:
+        series = ts["derivative{0}".format(derivative)]
+    except KeyError:
+        ts = generate_derivatives(ts)
+        series = ts["derivative{0}".format(derivative)]
+
     upper_limit = threshold
     lower_limit = -threshold
     for val in series:

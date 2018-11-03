@@ -31,10 +31,12 @@ class Classifier:
         :param time_series: either a list or a np.array that will be
         """
         df = generate_derivatives(time_series, verbose=False)
+        # index = list(range(len(time_series)))
+        # df = pd.Series(time_series, index)
         assert(isinstance(df, pd.DataFrame) or isinstance(df, pd.Series))
         df.plot()
         if self._classifier is not None:
-            classifying_point = classify_ts(time_series, self._classifier, window_size=10)
+            classifying_point = classify_ts(df, self._classifier, window_size=10)
 
             if classifying_point != -1:
                 plt.axvline(x=classifying_point, color="r")
@@ -47,7 +49,7 @@ class Classifier:
         """
         Creates an image directory structured like this:
         
-        IMAGE_DIR {
+        IMAGE_DIR/directory_name {
             FILE_1 {
                 FILTER_1.png
                 FILTER_2.png
@@ -91,8 +93,9 @@ class Classifier:
         
 
 if __name__ == "__main__":
-    
-    test = Classifier()
+    from derivative import series_threshold
+    test = Classifier(series_threshold)
+
     test.create_image_directory("test", verbose=True)
  
     print(test)
