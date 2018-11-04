@@ -28,6 +28,7 @@ create_py_file(){
 if [ ! -x $FILE_NAME ];
 then  
     echo "ERROR: $FILE_NAME already exists"
+    exit -1
 fi
 
 touch "$FILE_NAME"
