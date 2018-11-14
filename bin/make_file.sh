@@ -25,7 +25,7 @@ create_py_file(){
     echo >> $1
 }
 
-if [ ! -x $FILE_NAME ];
+if [ -f $FILE_NAME ];
 then  
     echo "ERROR: $FILE_NAME already exists"
     exit -1
