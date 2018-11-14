@@ -122,10 +122,9 @@ def classify_ts(ts: [list, np.array, pd.Series], classifier,
     :param kwargs: any additional arguements for the classifier function
     :return 1 if the time series identifies as malignant, 0 otherwise
     """
-    if isinstance(ts, list):
-        index = list(range(len(ts)))
-        ts = pd.Series(ts, index)
-        # ts = generate_derivatives(ts)
+    # if isinstance(ts, list):
+        # index = list(range(len(ts)))
+        # ts = pd.Series(ts, index)
 
     for index, window in enumerate(sliding_window(ts, window_size, step)):
         if classifier(window, **kwargs):

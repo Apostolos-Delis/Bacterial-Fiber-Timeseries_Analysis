@@ -10,7 +10,7 @@ import os  # For general os functions
 import pylab  # For saving plots
 
 
-DEFAULT_THRESHOLD = 0.05
+DEFAULT_THRESHOLD = 0.06
 
 
 def generate_derivatives(ts: [list, np.array], verbose=False) -> pd.DataFrame:
@@ -41,19 +41,26 @@ def generate_derivatives(ts: [list, np.array], verbose=False) -> pd.DataFrame:
     return df
 
 
-def series_threshold(ts, threshold: float = DEFAULT_THRESHOLD, derivative=2) -> bool:
+def series_threshold(ts: list, threshold: float = DEFAULT_THRESHOLD, derivative=2) -> bool:
     """
     Returns true or false based on whether the threshold was exceded by the time series
     """
-    try:
-        series = ts["derivative{0}".format(derivative)]
-    except KeyError:
-        ts = generate_derivatives(ts)
-        series = ts["derivative{0}".format(derivative)]
+    ts = generate_derivatives(ts)
+    series = ts["derivative{0}".format(derivative)]
 
     upper_limit = threshold
     lower_limit = -threshold
     for val in series:
+        if val >= upper_limit or val <= lower_limit:
+            return True
+    return False
+
+def percentage_threshold(ts: list, threshold: float = 0.15):
+    
+    upper_limit = 1 + threshold
+    lower_limit = 1 - threshold
+    
+    for val in ts:
         if val >= upper_limit or val <= lower_limit:
             return True
     return False
