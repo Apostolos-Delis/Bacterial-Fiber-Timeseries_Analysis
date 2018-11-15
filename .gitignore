@@ -11,6 +11,8 @@ env.bak/
 venv.bak/
 **/tmp/
 
+
 # Relateed to Data
 data/images/
 data/images_unclassified/
+data/numpy/*
