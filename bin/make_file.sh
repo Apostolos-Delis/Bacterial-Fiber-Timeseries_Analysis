@@ -13,12 +13,12 @@ create_py_file(){
     echo "#!/usr/bin/env python3" > $1
     echo "# coding: utf8" >> $1
     echo >> $1
-    echo >> $1
     echo "import numpy as np" >> $1
     echo "import pandas as pd" >> $1
     echo "import matplotlib.pyplot as plt" >> $1
     echo "import os" >> $1
     echo "import sys" >> $1
+    echo >> $1
     echo >> $1
     echo "if __name__ == \"__main__\":" >> $1
     echo "    pass" >> $1

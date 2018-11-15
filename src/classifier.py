@@ -90,7 +90,7 @@ class Classifier:
                 print("Creating Image Directory...")
             make_directory(IMAGE_DIR)
 
-        # Add the mat files into the queue to be processed
+        # Go through all the files in the DATA_DIR, classify them, and save the image
         for m, mat_file in enumerate(os.listdir(DATA_DIR)[:limit]):
             print("Processing file: {0}, file {1}/{2}"
                     .format(mat_file, m+1, len(os.listdir(DATA_DIR)[:limit])))
