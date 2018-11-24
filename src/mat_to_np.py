@@ -56,6 +56,7 @@ def load_np_file(file_name: str) -> np.array:
 def convert_mat_to_np(limit=100, verbose=True):
     """
     TODO: Write documentation for save_output_matrix
+    :param limit: int of 
     """
 
     for m, mat_file in enumerate(os.listdir(DATA_DIR)[:limit]):
@@ -80,8 +81,8 @@ def convert_mat_to_np(limit=100, verbose=True):
                 X.append(window)
                 if classifying_point == -1:
                     y.append(0)
-                elif index - classifying_point > 25:
-                    y.append(0)
+                # elif index - classifying_point > 25:
+                    # y.append(0)
                 else:
                     y.append(1 if index >= classifying_point else 0) 
             if verbose and (i+1) % 10 == 0:
