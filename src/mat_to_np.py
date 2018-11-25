@@ -41,11 +41,16 @@ def save_to_np(X: np.array, y: np.array, file_name: str):
     with open(file_name + "_Y.npy", "wb") as f:
         np.save(f, y)
 
-def load_np_file(file_name: str) -> np.array:
+def load_np_file(file_name: str, full_path=False) -> np.array:
     """
+    Load a numpy file and return in as a numpy array 
 
+    :param full_path: bool to specify if the file_name already has NUMPY_DIR 
+                      concatinated to it
     """
-    file_name = os.path.join(NUMPY_DIR, file_name)
+    if not full_path:
+        file_name = os.path.join(NUMPY_DIR, file_name)
+
     if not os.path.isfile(file_name):
         raise OSError("{0} does not exist!".format(file_name))
     f = open(file_name, "rb")

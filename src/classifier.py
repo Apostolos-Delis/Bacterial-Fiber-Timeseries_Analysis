@@ -25,7 +25,7 @@ class Classifier:
 
     def __repr__(self):
         return "Classifier Object <{0}> with classifier: {1}".format(
-                id(self), self._classifier.__name__)
+                hex(id(self)), self._classifier.__name__)
     
     def save_image(self, time_series, file_name: str, lines: dict):
         """

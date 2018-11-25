@@ -22,7 +22,8 @@ if __name__ == "__main__":
     y_data = load_np_file(y_file)
     
     print(y_data)
-    index = -1
-    plt.plot(x_data[index], color=colors[y_data[index]])
+    index = -100
+    for index in range(y_data.shape[0]):
+        plt.plot(x_data[index], color=colors[y_data[index]])
     plt.show()
 
