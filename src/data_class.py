@@ -2,15 +2,28 @@
 # coding: utf8
 
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 import os
-import sys
 
 from mat_to_np import load_np_file
 from constants import NUMPY_DIR
 
 class DataGenerator:
+    """
+    DataGenerator is a class that is usefull for dealing with the numpy data
+    for the bacterial fibers.
+
+    To use: 
+    
+        o Specify how many data points you will load in the constructor, with a default
+        of -1 for infinite values
+
+        o Load the data with the load_data function
+        
+        o If you want to access the data you can with get_data()
+
+        o train_test_split() will let you split the data for machine learning purposes
+
+    """
 
     def __init__(self, size=-1):
         """
