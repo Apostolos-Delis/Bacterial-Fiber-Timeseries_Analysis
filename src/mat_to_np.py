@@ -27,6 +27,7 @@ def get_correct_y(ts, threshold=0.05):
             return i
     return -1
 
+
 def save_to_np(X: np.array, y: np.array, file_name: str):
     """
     TODO: write documentation for save_to_np 
@@ -40,6 +41,7 @@ def save_to_np(X: np.array, y: np.array, file_name: str):
     # Save the Y output matrix (this is assuming f: X -> Y)
     with open(file_name + "_Y.npy", "wb") as f:
         np.save(f, y)
+
 
 def load_np_file(file_name: str, full_path=False) -> np.array:
     """
@@ -57,6 +59,7 @@ def load_np_file(file_name: str, full_path=False) -> np.array:
     arr = np.load(f)
     f.close()
     return arr
+
         
 def convert_mat_to_np(limit=100, verbose=True):
     """

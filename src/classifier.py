@@ -23,9 +23,11 @@ class Classifier:
         self._classifier = classifier
         self._gen_derivatives = gen_derivatives
 
+
     def __repr__(self):
         return "Classifier Object <{0}> with classifier: {1}".format(
                 hex(id(self)), self._classifier.__name__)
+
     
     def save_image(self, time_series, file_name: str, lines: dict):
         """
@@ -48,6 +50,7 @@ class Classifier:
         plt.savefig(file_name)
         plt.close()
 
+
     def classify_file(self, file_name):
         """
         Runs the classifier function on all the filters in the file_name
@@ -61,6 +64,7 @@ class Classifier:
         classifier_indexes = [classify_ts(ts, self._classifier) for ts in data]
         df = pd.Series(classifier_indexes, index)
         return df
+
 
     def create_image_directory(self, directory_name: str, limit: int = 100, verbose: bool = True):
         """
@@ -116,6 +120,7 @@ class Classifier:
             if verbose: 
                 print("Finished processing {0}...\n".format(mat_file))
 
+
     @staticmethod
     def compare(classifier_1, classifier_2, save_images=True, verbose=True):
         """
@@ -139,6 +144,7 @@ class Classifier:
             if verbose: 
                 print("Finished processing {0}...\n".format(mat_file))
 
+
     @staticmethod
     def compare(classifier_1, classifier_2, file_name: str, create_image_dir=False):
         """
@@ -152,13 +158,15 @@ class Classifier:
         series_1 = test.classify_file(test_file)
         series_2 = test2.classify_file(test_file)
 
+
 def temp(*args, **kwargs):
     return True
 
 
 if __name__ == "__main__":
     from derivative import series_threshold, percentage_threshold
-    test = Classifier(series_threshold, gen_derivatives=True)
+    from logistic_reg import logistic_reg_classifier
+    test = Classifier(logistic_reg_classifier, gen_derivatives=True)
     """
     test_file = "10-19-18-uv.mat"
     test2 = Classifier(percentage_threshold)

@@ -16,3 +16,4 @@ venv.bak/
 data/images/
 data/images_unclassified/
 data/numpy/*
+data/models/*

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf8
 
+
 import pandas as pd  # For data-frames
 import numpy as np  # Numerical computing
 import matplotlib.pyplot as plt  # Create Plots
@@ -10,6 +11,7 @@ import os  # For general os functions
 from sys import stderr  # For Error msges
 
 from constants import DATA_DIR, IMAGE_DIR
+
 
 def error(output, *args, interupt=False, **kwargs):
     print("\033[0;49;31m{0}\033[0m".format(output), *args, file=stderr, **kwargs)
@@ -33,6 +35,7 @@ def make_directory(file_path: str):
             print("Error while attempting to create a directory.")
             exit(3)
 
+
 def load_from_mat(file_name: str) -> dict:
     """
     Loads the data from a matlab .mat file into python
@@ -47,6 +50,7 @@ def load_from_mat(file_name: str) -> dict:
         return sio.loadmat(file_path)
     else:
         raise OSError("{0} is not a file!".format(file_path))
+
 
 def process_mat(mat: dict):
     """
@@ -69,13 +73,13 @@ def process_mat(mat: dict):
     except KeyError as err:
         error(err, interupt=True)
 
-    NUM_FILTERS = len(data[0][0])
+    num_filters = len(data[0][0])
 
     averaged_list = []
     
     # Average over the bacterial fiber
     # The current Matrix is 93 x 13 x 40, want it 40 x 93
-    for filter_index in range(NUM_FILTERS):
+    for filter_index in range(num_filters):
         filter_time_series = []
         for time_index, time_stamp in enumerate(data):
             l = []
@@ -88,9 +92,16 @@ def process_mat(mat: dict):
 
 
 def sliding_window(sequence,window_size=10,step=1):
-    """Returns a generator that will iterate through
+    """
+    Returns a generator that will iterate through
     the defined chunks of input sequence.  Input sequence
-    must be iterable."""
+    must be iterable.
+    
+    :param sequence: iterable sequence for the sliding window
+    :param window_size: how large the window will be, ideally it
+                        should be less than the sequence length
+    :param step: the step size of the window
+    """
  
     # Verify the inputs
     try: it = iter(sequence)
@@ -109,6 +120,7 @@ def sliding_window(sequence,window_size=10,step=1):
     # Do the work
     for i in range(0,num_chunks*step,step):
         yield sequence[i:i+window_size]
+        
 
 def classify_ts(ts: [list, np.array, pd.Series], classifier,
                 window_size: int = 10, step: int = 1, **kwargs):

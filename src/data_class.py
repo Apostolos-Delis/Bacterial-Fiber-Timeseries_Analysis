@@ -34,13 +34,16 @@ class DataGenerator:
         self._x_data = None
         self._y_data = None
 
+
     def __str__(self):
         return "DataGenerator object at <{0}>".format(hex(id(self)))
+
 
     def get_data(self):
         if self._x_data is None:
             self.load_data()
         return (self._x_data, self._y_data)
+
 
     def train_test_split(self, train_percentage=0.8):
         """
@@ -62,6 +65,7 @@ class DataGenerator:
         Y_test = self._y_data[num_training:]
 
         return (X_train, Y_train, X_test, Y_test)
+
 
     def load_data(self) -> tuple:
         """

@@ -55,6 +55,7 @@ def series_threshold(ts: list, threshold: float = DEFAULT_THRESHOLD, derivative=
             return True
     return False
 
+
 def percentage_threshold(ts: list, threshold: float = 0.15):
     
     upper_limit = 1 + threshold
@@ -64,6 +65,7 @@ def percentage_threshold(ts: list, threshold: float = 0.15):
         if val >= upper_limit or val <= lower_limit:
             return True
     return False
+
 
 if __name__ == "__main__":
 
