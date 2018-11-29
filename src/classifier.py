@@ -166,7 +166,8 @@ def temp(*args, **kwargs):
 if __name__ == "__main__":
     from derivative import series_threshold, percentage_threshold
     from logistic_reg import logistic_reg_classifier
-    test = Classifier(logistic_reg_classifier, gen_derivatives=True)
+    from svm import svm_classifier
+    test = Classifier(svm_classifier, gen_derivatives=True)
     """
     test_file = "10-19-18-uv.mat"
     test2 = Classifier(percentage_threshold)
