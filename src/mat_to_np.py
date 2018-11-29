@@ -12,6 +12,7 @@ from utilities import process_mat, load_from_mat, sliding_window
 from derivative import generate_derivatives
 from constants import DATA_DIR, NUMPY_DIR
 
+WINDOW_SIZE = 10
 
 def get_correct_y(ts, threshold=0.05):
     """
@@ -85,14 +86,15 @@ def convert_mat_to_np(limit=100, verbose=True):
         for i, ts in enumerate(data):
             # Get the index for where the time series becomes classified as  
             classifying_point = get_correct_y(ts)
-            for index, window in enumerate(sliding_window(ts, window_size=10)):
+            for index, window in enumerate(sliding_window(ts, window_size=WINDOW_SIZE)):
                 X.append(window)
                 if classifying_point == -1:
                     y.append(0)
                 # elif index - classifying_point > 25:
                     # y.append(0)
                 else:
-                    y.append(1 if index >= classifying_point else 0) 
+                    # TODO: Fix this, the index needs to include the sliding window index length
+                    y.append(1 if (index + WINDOW_SIZE - 1) >= classifying_point else 0) 
             if verbose and (i+1) % 10 == 0:
                 print("Processing fiber: {0}/{1}"
                     .format(i+1, len(data)))

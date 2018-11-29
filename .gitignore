@@ -10,6 +10,7 @@ ENV/
 env.bak/
 venv.bak/
 **/tmp/
+src/to_send/
 
 
 # Relateed to Data

@@ -9,8 +9,9 @@ from os import path
 from time import strftime
 from glob import glob
 
-from sklearn.linear_model import LogisticRegression
+from sklearn import svm
 from sklearn import metrics
+# from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 from sklearn.metrics import roc_auc_score
 from sklearn.metrics import roc_curve
@@ -42,14 +43,13 @@ def train_model(verbose=True, training_percentage=0.8,
         print("Loaded {0} examples.".format(X_train.shape[0]))
         print("Data Ready, beginning to train...")
 
-    logistic_reg_verbosity = 1 if verbose else 0
 
-    logreg = LogisticRegression(verbose=logistic_reg_verbosity)
-    logreg.fit(X_train, Y_train)
+    svm_classifier = svm.SVC(gamma="scale")
+    svm_classifier.fit(X_train, Y_train)
 
-    Y_pred = logreg.predict(X_test)
-    print('Accuracy of logistic regression classifier on test set: \033[1;49;32m{:.2f}\033[0m'
-            .format(logreg.score(X_test, Y_test)))
+    Y_pred = svm_classifier.predict(X_test)
+    print('Accuracy of SVM regression classifier on test set: \033[1;49;32m{:.2f}\033[0m'
+            .format(svm_classifier.score(X_test, Y_test)))
 
     confusion_matrix = metrics.confusion_matrix(Y_test, Y_pred)
     if verbose:
@@ -63,10 +63,10 @@ def train_model(verbose=True, training_percentage=0.8,
     if plot_roc:
         if verbose:
             print("Plotting ROC curves...")
-        logit_roc_auc = roc_auc_score(Y_test, logreg.predict(X_test))
-        fpr, tpr, thresholds = roc_curve(Y_test, logreg.predict_proba(X_test)[:,1])
+        logit_roc_auc = roc_auc_score(Y_test, svm_classifier.predict(X_test))
+        fpr, tpr, thresholds = roc_curve(Y_test, svm_classifier.predict_proba(X_test)[:,1])
         plt.figure()
-        plt.plot(fpr, tpr, label='Logistic Regression (area = %0.2f)' % logit_roc_auc)
+        plt.plot(fpr, tpr, label='SVM (area = %0.2f)' % logit_roc_auc)
         plt.plot([0, 1], [0, 1],'r--')
         plt.xlim([0.0, 1.0])
         plt.ylim([0.0, 1.05])
@@ -79,15 +79,15 @@ def train_model(verbose=True, training_percentage=0.8,
 
     if save_model:
         if verbose:
-            print("Serializing the logistic regression classifier")
+            print("Serializing the SVM classifier")
         time_str = strftime("%Y-%m-%d_%H-%M-%S")
-        file_name = "Logistic_Reg_" + time_str + ".sav"
-        serialize_model(file_name, model=logreg)
+        file_name = "svm_" + time_str + ".sav"
+        serialize_model(file_name, model=svm_classifier)
 
 
 def serialize_model(file_name: str, model):
     """
-    Serialize the logistic regression model using pickle
+    Serialize the SVM model using pickle
     
     :param file_name: the name of the file of the model
     :param model: the sklearn logistic regression model
@@ -97,7 +97,7 @@ def serialize_model(file_name: str, model):
     pickle.dump(model, open(file_name, 'wb'))
 
 
-def load_model(file_name: str, full_path: bool=False):
+def load_model(file_name: str, full_path: bool = False):
     """
     Load a serialized model from a file
 
@@ -115,9 +115,10 @@ def load_model(file_name: str, full_path: bool=False):
     return pickle.load(open(file_name, 'rb'))
 
 
-def logistic_reg_classifier(ts: list) -> bool:
+def svm_classifier(ts: list) -> bool:
     """
-    TODO: Write Documentation for logistic_reg_prediction
+    Returns true or false based on whether the support vector machine
+    returns 1 or 0 with ts as the input data 
     """
     classification_map = {1: True, 0: False}
     list_of_files = glob(MODEL_DIR + "/*")

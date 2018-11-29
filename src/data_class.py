@@ -101,7 +101,7 @@ class DataGenerator:
 
 
 if __name__ == "__main__":
-    dg = DataGenerator(100)
+    dg = DataGenerator()
     X_data, Y_data, _, _, = dg.train_test_split()
     print(X_data.shape)
     print(Y_data.shape)

@@ -178,6 +178,6 @@ if __name__ == "__main__":
         print(" {0}\t  {1}\t\t{2}\t\t{3}".format(
             i, series_1[i], series_2[i], series_1[i]-series_2[i]))
     """
-    test.create_image_directory("test", verbose=True)
+    test.create_image_directory("test", verbose=True, limit=1)
  
     # print(test)
