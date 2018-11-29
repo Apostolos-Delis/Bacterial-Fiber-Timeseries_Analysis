@@ -14,9 +14,12 @@ from constants import DATA_DIR, NUMPY_DIR
 
 WINDOW_SIZE = 10
 
-def get_correct_y(ts, threshold=0.05):
+def get_correct_y(ts: list, threshold=0.05) -> int:
     """
-    TODO: Write documentation for get_correct_y
+    Correctly classifies the time series for a bacterial fiber
+    Classifies it using the second derivative test
+
+    :param ts: time series of a bacterial fiber
     """
 
     ts = generate_derivatives(ts)
@@ -31,7 +34,12 @@ def get_correct_y(ts, threshold=0.05):
 
 def save_to_np(X: np.array, y: np.array, file_name: str):
     """
-    TODO: write documentation for save_to_np 
+    Serialize a numpy array X and its corresponding output y
+
+    :param X: the input matrix
+    :param y: its corresponding output matrix
+    :param file_name: the name of the numpy files will become
+                      file_name_X.npy and file_name_Y.npy
     """
     file_name = os.path.join(NUMPY_DIR, file_name)
 
@@ -64,8 +72,11 @@ def load_np_file(file_name: str, full_path=False) -> np.array:
         
 def convert_mat_to_np(limit=100, verbose=True):
     """
-    TODO: Write documentation for save_output_matrix
-    :param limit: int of 
+    Converts all the mat files in DATA_DIR into numpy files
+    in NUMPY_DIR
+
+    :param limit: The max number of files to convert
+    :param verbose: bool to display progress information
     """
 
     for m, mat_file in enumerate(os.listdir(DATA_DIR)[:limit]):
@@ -90,10 +101,7 @@ def convert_mat_to_np(limit=100, verbose=True):
                 X.append(window)
                 if classifying_point == -1:
                     y.append(0)
-                # elif index - classifying_point > 25:
-                    # y.append(0)
                 else:
-                    # TODO: Fix this, the index needs to include the sliding window index length
                     y.append(1 if (index + WINDOW_SIZE - 1) >= classifying_point else 0) 
             if verbose and (i+1) % 10 == 0:
                 print("Processing fiber: {0}/{1}"

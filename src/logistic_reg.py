@@ -81,7 +81,7 @@ def train_model(verbose=True, training_percentage=0.8,
         if verbose:
             print("Serializing the logistic regression classifier")
         time_str = strftime("%Y-%m-%d_%H-%M-%S")
-        file_name = "Logistic_Reg_" + time_str + ".sav"
+        file_name = "logistic_reg_" + time_str + ".sav"
         serialize_model(file_name, model=logreg)
 
 
@@ -117,14 +117,20 @@ def load_model(file_name: str, full_path: bool=False):
 
 def logistic_reg_classifier(ts: list) -> bool:
     """
-    TODO: Write Documentation for logistic_reg_prediction
+    Returns true or false based on whether the logistic regression
+    classifier returns 1 or 0 with ts as the input data 
+
+    :param ts: list of time series to be classified
     """
     classification_map = {1: True, 0: False}
-    list_of_files = glob(MODEL_DIR + "/*")
-    latest_file = max(list_of_files, key=path.getctime)
-    
+    list_of_files = glob(MODEL_DIR + "/logistic_reg_*.sav")
 
+    if list_of_files == []:
+        raise Exception("Error: No logistic regression model saved")
+
+    latest_file = max(list_of_files, key=path.getctime)
     classifier = load_model(latest_file, full_path=True)
+
     try:
         prediction = int(np.array(classifier.predict(ts)).reshape(1)[0])
     except ValueError:

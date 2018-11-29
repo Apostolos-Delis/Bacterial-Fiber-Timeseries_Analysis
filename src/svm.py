@@ -119,13 +119,18 @@ def svm_classifier(ts: list) -> bool:
     """
     Returns true or false based on whether the support vector machine
     returns 1 or 0 with ts as the input data 
+
+    :param ts: list of time series to be classified
     """
     classification_map = {1: True, 0: False}
-    list_of_files = glob(MODEL_DIR + "/*")
-    latest_file = max(list_of_files, key=path.getctime)
-    
+    list_of_files = glob(MODEL_DIR + "/svm_*.sav")
 
+    if list_of_files == []:
+        raise Exception("Error: No logistic regression model saved")
+
+    latest_file = max(list_of_files, key=path.getctime)
     classifier = load_model(latest_file, full_path=True)
+
     try:
         prediction = int(np.array(classifier.predict(ts)).reshape(1)[0])
     except ValueError:
@@ -145,12 +150,10 @@ if __name__ == "__main__":
     # print(test_data[0], y[0])
     # print(logistic_reg_prediction(test_data[0]))
 
-
     train_model(verbose=True, training_percentage=0.8, 
         plot_roc=False, save_model=True)
     # index = -100
     # for index in range(y_data.shape[0]):
         # plt.plot(x_data[index], color=colors[y_data[index]])
     # plt.show()
-
 
