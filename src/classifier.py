@@ -45,8 +45,9 @@ class Classifier:
 
         df.plot()
 
-        for line in lines.keys():
-            plt.axvline(x=line, color=lines[line])
+        for color in lines.keys():
+            for line in lines[color]:
+                plt.axvline(x=line, color=color)
         plt.savefig(file_name)
         plt.close()
 
@@ -107,11 +108,11 @@ class Classifier:
                         path.join(image_name, "filter_{0}.png".format(i)))
 
                 # Find the point where the graph is classified at so it can be added as a line
-                lines = dict()
+                lines = {'r': [], 'b': []}
                 if self._classifier is not None:
                     classifying_point = classify_ts(ts, self._classifier, window_size=10)
                     if classifying_point != -1:
-                        lines[classifying_point] = "r"
+                        lines['r'].append(classifying_point)
 
                 self.save_image(ts, ts_name, lines)
                 if verbose and (i+1) % 10 == 0:
@@ -122,63 +123,88 @@ class Classifier:
 
 
     @staticmethod
-    def compare(classifier_1, classifier_2, save_images=True, verbose=True):
+    def compare(classifier_1, classifier_2, directory_name: str, 
+                save_images=True, verbose=True, limit=1000):
         """
-        TODO: Implement Compare function
-        """
+        Compare the results of classifier_1 and classifier_2
 
+        :param classifer_1 and classifier_2: need to be functions
+                                             that return true or false
+                                             after classifying a time series
+        :param directory_name: the name of where the images will be stored
+                               note: they will be stored in IMAGE_DIR
+        :param save_images: whether to save the images or not
+        :param verbose: display the progress report
+        :param limit: how many matlab files at max to compare
+        """
+        directory_name = path.join(IMAGE_DIR, directory_name)
+        if not path.isdir(directory_name):
+            if verbose:
+                print("Creating Image Directory...")
+            make_directory(IMAGE_DIR)
+
+        plotter = Classifier(None, gen_derivatives=True)
+        
+        classifier_1_vals = []
+        classifier_2_vals = []
         for m, mat_file in enumerate(os.listdir(DATA_DIR)[:limit]):
             print("Processing file: {0}, file {1}/{2}"
                     .format(mat_file, m+1, len(os.listdir(DATA_DIR)[:limit])))
             mat = load_from_mat(mat_file)
             data = process_mat(mat)
             image_name = mat_file.split('.')[-2] 
-            make_directory(path.join(directory_name, image_name))
+            if save_images:
+                make_directory(path.join(directory_name, image_name))
+
             for i, ts in enumerate(data):
                 ts_name = path.join(directory_name, 
                         path.join(image_name, "filter_{0}.png".format(i)))
-                self.save_image(ts, ts_name)
+
+                lines = {'r': [], 'b': []}
+                classifying_point_1 = classify_ts(ts, classifier_1, window_size=10)
+                if classifying_point_1 != -1:
+                    classifier_1_vals.append(classifying_point_1)
+                    lines['r'].append(classifying_point_1)
+
+                classifying_point_2 = classify_ts(ts, classifier_2, window_size=10)
+                if classifying_point_2 != -1:
+                    classifier_2_vals.append(classifying_point_2)
+                    lines['b'].append(classifying_point_2)
+
+                if save_images:
+                    plotter.save_image(ts, ts_name, lines)
                 if verbose and (i+1) % 10 == 0:
                     print("Processing fiber: {0}/{1}"
                         .format(i+1, len(data)))
             if verbose: 
                 print("Finished processing {0}...\n".format(mat_file))
 
+        if verbose:
+            print("Generating Classification Report..")
+        
+        classifier_1_vals = np.array(classifier_1_vals)
+        average_1 = np.average(classifier_1_vals)
+        classifier_2_vals = np.array(classifier_2_vals)
+        average_2 = np.average(classifier_2_vals)
 
-    @staticmethod
-    def compare(classifier_1, classifier_2, file_name: str, create_image_dir=False):
-        """
-        TODO: Write Documentation for this
-        pass"""
-        if not isinstance(classifier_1, Classifier):
-            class_1 = Classifier(classifier_1)
-        if not isinstance(classifier_2, Classifier):
-            class_2 = Classifier(classifier_2)
-
-        series_1 = test.classify_file(test_file)
-        series_2 = test2.classify_file(test_file)
-
-
-def temp(*args, **kwargs):
-    return True
-
+        print("Average of {0}: ".format(classifier_1.__name__))
+        print("Average of {0} over {1} items".format(average_1, classifier_1_vals.size))
+        print("----------------------------")
+        print("Average of {0}: ".format(classifier_2.__name__))
+        print("Average of {0} over {1} items".format(average_2, classifier_2_vals.size))
+        
 
 if __name__ == "__main__":
     from derivative import series_threshold, percentage_threshold
     from logistic_reg import logistic_reg_classifier
     from svm import svm_classifier
-    test = Classifier(svm_classifier, gen_derivatives=True)
-    """
-    test_file = "10-19-18-uv.mat"
-    test2 = Classifier(percentage_threshold)
-    series_1 = test.classify_file(test_file)
-    series_2 = test2.classify_file(test_file)
-    # df = pd.concat(series_1, series_2)
-    print("Filter | 2nd_Deriv | 1.2 Threshold | Difference ")
-    for i in range(1, len(series_1)+1):
-        print(" {0}\t  {1}\t\t{2}\t\t{3}".format(
-            i, series_1[i], series_2[i], series_1[i]-series_2[i]))
-    """
-    test.create_image_directory("test", verbose=True, limit=1)
- 
-    # print(test)
+
+    directory_name = "2nd_deriv_vs_standard_threshold"
+    Classifier.compare(svm_classifier,
+                    logistic_reg_classifier,
+                    directory_name,
+                    save_images=False,
+                    limit=1)
+    
+    # test = Classifier(svm_classifier, gen_derivatives=True)
+    # test.create_image_directory("test", limit=1)

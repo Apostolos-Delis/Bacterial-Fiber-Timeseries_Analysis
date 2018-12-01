@@ -128,7 +128,7 @@ def classify_ts(ts: [list, np.array, pd.Series], classifier,
     Attempt to classify the time series as malignant or not. 
     
     :param ts: list or np.array of the time series
-    :param classifier: the function that will classify the function
+    :param classifier: the function that will classify the time series
     :param window_size: how large you want the sliding window panel to be
     :param step: how many indexes to jump with each iteration of sliding window
     :param kwargs: any additional arguements for the classifier function
