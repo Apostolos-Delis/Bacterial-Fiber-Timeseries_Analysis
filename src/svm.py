@@ -22,7 +22,7 @@ from constants import MODEL_DIR
 
 
 def train_model(verbose=True, training_percentage=0.8, 
-        plot_roc=False, save_model=True):
+        plot_roc=False, save_model=True, svm_kernel='rbf'):
     """
     Trains the logistic regression model.
 
@@ -30,8 +30,10 @@ def train_model(verbose=True, training_percentage=0.8,
     :training_percentage: float from 0 to 1 of what percent of the 
                           data will be use for training purposes as 
                           opposed to testing
-    :plot_roc: bool for whether to display ROC curves for the model
-    :save_mode: bool for whether to save the trained model
+    :param plot_roc: bool for whether to display ROC curves for the model
+    :param save_mode: bool for whether to save the trained model
+    :param svm_kernel: svm kernel, possible choices are: "rbf", "poly"
+                       "sigmoid", and "precomputed"
     """
     data_gen = DataGenerator()
     if verbose:
@@ -44,7 +46,7 @@ def train_model(verbose=True, training_percentage=0.8,
         print("Data Ready, beginning to train...")
 
 
-    svm_classifier = svm.SVC(gamma="scale")
+    svm_classifier = svm.SVC(kernel=svm_kernel, gamma="scale")
     svm_classifier.fit(X_train, Y_train)
 
     Y_pred = svm_classifier.predict(X_test)
@@ -81,7 +83,7 @@ def train_model(verbose=True, training_percentage=0.8,
         if verbose:
             print("Serializing the SVM classifier")
         time_str = strftime("%Y-%m-%d_%H-%M-%S")
-        file_name = "svm_" + time_str + ".sav"
+        file_name = "svm_" + svm_kernel + '_' + time_str + ".sav"
         serialize_model(file_name, model=svm_classifier)
 
 
@@ -151,7 +153,7 @@ if __name__ == "__main__":
     # print(logistic_reg_prediction(test_data[0]))
 
     train_model(verbose=True, training_percentage=0.8, 
-        plot_roc=False, save_model=True)
+        plot_roc=False, save_model=True, svm_kernel='rbf')
     # index = -100
     # for index in range(y_data.shape[0]):
         # plt.plot(x_data[index], color=colors[y_data[index]])

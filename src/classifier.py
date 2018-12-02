@@ -25,8 +25,12 @@ class Classifier:
 
 
     def __repr__(self):
-        return "Classifier Object <{0}> with classifier: {1}".format(
-                hex(id(self)), self._classifier.__name__)
+        try:
+            return "Classifier Object <{0}> with classifier: {1}".format(
+                    hex(id(self)), self._classifier.__name__)
+        except AttributeError:
+            return "Classifier Object <{0}> with no classifier".format(hex(id(self)))
+
 
     
     def save_image(self, time_series, file_name: str, lines: dict):
@@ -200,11 +204,12 @@ if __name__ == "__main__":
     from svm import svm_classifier
 
     directory_name = "2nd_deriv_vs_standard_threshold"
-    Classifier.compare(svm_classifier,
-                    logistic_reg_classifier,
-                    directory_name,
-                    save_images=False,
-                    limit=1)
+    # Classifier.compare(svm_classifier,
+                    # percentage_threshold,
+                    # directory_name,
+                    # save_images=False,
+                    # limit=1)
     
-    # test = Classifier(svm_classifier, gen_derivatives=True)
-    # test.create_image_directory("test", limit=1)
+    test = Classifier(svm_classifier, gen_derivatives=True)
+
+    test.create_image_directory("rbf_kernel", limit=1)

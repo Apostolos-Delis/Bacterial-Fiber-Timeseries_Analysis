@@ -4,10 +4,8 @@
 import pandas as pd  # For data-frames
 import numpy as np  # Numerical computing
 import matplotlib.pyplot as plt  # Create Plots
-import scipy.io as sio  # To load matlab files
 from os import path  # For robust pathing
 import os  # For general os functions
-import pylab  # For saving plots
 
 
 DEFAULT_THRESHOLD = 0.06
