@@ -17,7 +17,8 @@ WINDOW_SIZE = 10
 def get_correct_y(ts: list, threshold=0.05) -> int:
     """
     Correctly classifies the time series for a bacterial fiber
-    Classifies it using the second derivative test
+    Classifies it using the second derivative test and the 
+    percentage threshold
 
     :param ts: time series of a bacterial fiber
     """
@@ -30,7 +31,6 @@ def get_correct_y(ts: list, threshold=0.05) -> int:
         if val >= upper_limit or val <= lower_limit:
             return i
     return -1
-
 
 def save_to_np(X: np.array, y: np.array, file_name: str):
     """
@@ -111,6 +111,14 @@ def convert_mat_to_np(limit=100, verbose=True):
 
         X = np.array(X)
         y = np.array(y)
+
+        # Randomly shuffle the data
+        indices = np.arange(X.shape[0])
+        np.random.shuffle(indices)
+
+        X = X[indices]
+        y = y[indices]
+
         save_to_np(X, y, file_name)
 
 

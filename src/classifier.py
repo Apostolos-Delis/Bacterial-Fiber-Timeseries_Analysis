@@ -128,7 +128,8 @@ class Classifier:
 
     @staticmethod
     def compare(classifier_1, classifier_2, directory_name: str, 
-                save_images=True, verbose=True, limit=1000):
+                save_images=True, verbose=True, limit=1000,
+                ignore_blue=True):
         """
         Compare the results of classifier_1 and classifier_2
 
@@ -140,6 +141,8 @@ class Classifier:
         :param save_images: whether to save the images or not
         :param verbose: display the progress report
         :param limit: how many matlab files at max to compare
+        :param ignore_blue: bool for whether to test against 
+                            blue light data
         """
         directory_name = path.join(IMAGE_DIR, directory_name)
         if not path.isdir(directory_name):
@@ -154,6 +157,12 @@ class Classifier:
         for m, mat_file in enumerate(os.listdir(DATA_DIR)[:limit]):
             print("Processing file: {0}, file {1}/{2}"
                     .format(mat_file, m+1, len(os.listdir(DATA_DIR)[:limit])))
+
+            if ignore_blue and "blue" in mat_file:
+                if verbose:
+                    print("{0} is a blue light dataset, ignoring...\n".format(mat_file))
+                continue
+
             mat = load_from_mat(mat_file)
             data = process_mat(mat)
             image_name = mat_file.split('.')[-2] 
@@ -204,12 +213,13 @@ if __name__ == "__main__":
     from svm import svm_classifier
 
     directory_name = "2nd_deriv_vs_standard_threshold"
-    # Classifier.compare(svm_classifier,
-                    # percentage_threshold,
-                    # directory_name,
-                    # save_images=False,
-                    # limit=1)
+    Classifier.compare(svm_classifier,
+                    percentage_threshold,
+                    directory_name,
+                    save_images=False,
+                    limit=100,
+                    ignore_blue=True)
     
-    test = Classifier(svm_classifier, gen_derivatives=True)
+    # test = Classifier(svm_classifier, gen_derivatives=True)
 
-    test.create_image_directory("rbf_kernel", limit=1)
+    # test.create_image_directory("rbf_kernel", limit=1)
