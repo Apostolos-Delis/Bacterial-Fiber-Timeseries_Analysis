@@ -212,12 +212,13 @@ if __name__ == "__main__":
     from logistic_reg import logistic_reg_classifier
     from svm import svm_classifier
 
-    directory_name = "2nd_deriv_vs_standard_threshold"
+    directory_name = "svm_classifier_vs_percentage_threshold"
     Classifier.compare(svm_classifier,
                     percentage_threshold,
                     directory_name,
                     save_images=False,
                     limit=100,
+                    verbose=False,
                     ignore_blue=True)
     
     # test = Classifier(svm_classifier, gen_derivatives=True)

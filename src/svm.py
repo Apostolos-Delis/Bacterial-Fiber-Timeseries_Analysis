@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-# coding: utf8
-
+# coding: utf8 
 import numpy as np
 import pickle
 import matplotlib.pyplot as plt
@@ -46,7 +45,7 @@ def train_model(verbose=True, training_percentage=0.8,
         print("Data Ready, beginning to train...")
 
 
-    svm_classifier = svm.SVC(kernel=svm_kernel, gamma="scale")
+    svm_classifier = svm.SVC(kernel=svm_kernel, gamma="scale", verbose=verbose)
     svm_classifier.fit(X_train, Y_train)
 
     Y_pred = svm_classifier.predict(X_test)
@@ -141,21 +140,7 @@ def svm_classifier(ts: list) -> bool:
 
 
 if __name__ == "__main__":
-    colors = {
-            0: "b",
-            1: "r",
-            }
-    x_file = "10-9-18-uv_X.npy"
-    y_file = "10-9-18-uv_Y.npy"
-    # dg = DataGenerator(100)
-    # test_data, y = dg.get_data()
-    # print(test_data[0], y[0])
-    # print(logistic_reg_prediction(test_data[0]))
-
+    kernel='rbf'
     train_model(verbose=True, training_percentage=0.8, 
-        plot_roc=False, save_model=True, svm_kernel='rbf')
-    # index = -100
-    # for index in range(y_data.shape[0]):
-        # plt.plot(x_data[index], color=colors[y_data[index]])
-    # plt.show()
+        plot_roc=False, save_model=True, svm_kernel=kernel)
 

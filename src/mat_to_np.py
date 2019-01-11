@@ -97,6 +97,8 @@ def convert_mat_to_np(limit=100, verbose=True):
         for i, ts in enumerate(data):
             # Get the index for where the time series becomes classified as  
             classifying_point = get_correct_y(ts)
+            if classifying_point != -1:
+                classifying_point -= 3
             for index, window in enumerate(sliding_window(ts, window_size=WINDOW_SIZE)):
                 X.append(window)
                 if classifying_point == -1:
