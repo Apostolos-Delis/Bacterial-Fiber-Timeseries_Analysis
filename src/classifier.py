@@ -184,6 +184,16 @@ class Classifier:
                     classifier_2_vals.append(classifying_point_2)
                     lines['b'].append(classifying_point_2)
 
+                if classifying_point_2 == -1 and classifying_point_1 != -1:
+                    print("Classifying point 2 classified!")
+                    make_directory(path.join(directory_name, image_name))
+                    plotter.save_image(ts, ts_name, lines)
+
+                if classifying_point_2 != -1 and classifying_point_1 == -1:
+                    print("Classifying point 1 classified!")
+                    make_directory(path.join(directory_name, image_name))
+                    plotter.save_image(ts, ts_name, lines)
+
                 if save_images:
                     plotter.save_image(ts, ts_name, lines)
                 if verbose and (i+1) % 10 == 0:
@@ -212,7 +222,7 @@ if __name__ == "__main__":
     from logistic_reg import logistic_reg_classifier
     from svm import svm_classifier
 
-    directory_name = "svm_classifier_vs_percentage_threshold"
+    directory_name = "svm_classifier_vs_standard_threshold"
     Classifier.compare(svm_classifier,
                     percentage_threshold,
                     directory_name,

@@ -27,14 +27,14 @@ class DataGenerator:
 
     def __init__(self, size=-1):
         """
-        :param size: how many data points you want in the generator object, d
+        :param size: how many data points you want in the generator object,
                      the default of -1 is infinite
         """
         self._size = size
         self._x_data = None
         self._y_data = None
 
-
+ 
     def __str__(self):
         return "DataGenerator object at <{0}>".format(hex(id(self)))
 
