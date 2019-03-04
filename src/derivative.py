@@ -22,8 +22,9 @@ def generate_derivatives(ts: [list, np.array], verbose=False) -> pd.DataFrame:
     :param ts: list of the time series that will be modeled
     :param verbose: bool for whether to display the dataframe to stdout
     """
+    
     index = list(range(len(ts)))
-    tmp = pd.Series(ts, index)
+    tmp = pd.Series(np.mean(ts, axis=1), index)
 
     dxdt = np.gradient(tmp.values)
     dxdt2 = np.gradient(dxdt)
@@ -55,7 +56,7 @@ def series_threshold(ts: list, threshold: float = DEFAULT_THRESHOLD, derivative=
 
 
 def percentage_threshold(ts: list, threshold: float = 0.2):
-    
+    ts = np.mean(ts, axis=1)
     upper_limit = 1 + threshold
     lower_limit = 1 - threshold
     

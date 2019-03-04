@@ -131,7 +131,7 @@ def svm_classifier(ts: list) -> bool:
 
     latest_file = max(list_of_files, key=path.getctime)
     classifier = load_model(latest_file, full_path=True)
-
+    ts = np.mean(ts, axis=1)
     try:
         prediction = int(np.array(classifier.predict(ts)).reshape(1)[0])
     except ValueError:

@@ -231,6 +231,6 @@ if __name__ == "__main__":
                     verbose=False,
                     ignore_blue=True)
     
-    # test = Classifier(svm_classifier, gen_derivatives=True)
+    # test = Classifier(percentage_threshold, gen_derivatives=True)
 
     # test.create_image_directory("rbf_kernel", limit=1)

@@ -65,9 +65,9 @@ def process_mat(mat: dict):
     # First average the 13 bacterial fibers
     try:
         if "B3" in mat.keys():
-            data = mat["B3"]
+            data = np.array(mat["B3"])
         elif "B" in mat.keys():
-            data = mat["B"]
+            data = np.array(mat["B"])
         else:
             error(mat.keys(), interrupt=True) 
     except KeyError as err:
@@ -78,14 +78,14 @@ def process_mat(mat: dict):
     averaged_list = []
     
     # Average over the bacterial fiber
-    # The current Matrix is 93 x 13 x 40, want it 40 x 93
+    # The current Matrix is 93 x 13 x 40, want it 40 x 93 x 13
     for filter_index in range(num_filters):
         filter_time_series = []
         for time_index, time_stamp in enumerate(data):
             l = []
             for fiber in time_stamp:
                 l.append(fiber[filter_index])
-            filter_time_series.append(np.average(l))
+            filter_time_series.append(l)
         averaged_list.append(filter_time_series)
 
     return averaged_list
@@ -147,4 +147,6 @@ def classify_ts(ts: [list, np.array, pd.Series], classifier,
 
 if __name__ == "__main__":
     pass
+
+    
 
