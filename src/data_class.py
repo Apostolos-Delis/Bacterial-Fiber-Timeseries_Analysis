@@ -85,8 +85,10 @@ class DataGenerator:
 
         x_data = np.array(x_data)
         y_data = np.array(y_data)
+        print(x_data.shape)
+        print(y_data.shape)
 
-        x_data = x_data.reshape((x_data.shape[0] * x_data.shape[1], x_data.shape[2]))
+        x_data = x_data.reshape((x_data.shape[0] * x_data.shape[1], x_data.shape[2], x_data.shape[3]))
         y_data = y_data.reshape((y_data.shape[0] * y_data.shape[1],))
 
         if self._size >= -1 and x_data.shape[0] > self._size:

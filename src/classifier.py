@@ -223,14 +223,14 @@ if __name__ == "__main__":
     from svm import svm_classifier
 
     directory_name = "svm_classifier_vs_standard_threshold"
-    Classifier.compare(svm_classifier,
-                    percentage_threshold,
-                    directory_name,
-                    save_images=False,
-                    limit=100,
-                    verbose=False,
-                    ignore_blue=True)
+    # Classifier.compare(svm_classifier,
+                    # percentage_threshold,
+                    # directory_name,
+                    # save_images=False,
+                    # limit=100,
+                    # verbose=False,
+                    # ignore_blue=True)
     
-    # test = Classifier(percentage_threshold, gen_derivatives=True)
+    test = Classifier(percentage_threshold, gen_derivatives=True)
 
-    # test.create_image_directory("rbf_kernel", limit=1)
+    test.create_image_directory("rbf_kernel", limit=1)

@@ -14,7 +14,7 @@ from constants import DATA_DIR, NUMPY_DIR
 
 WINDOW_SIZE = 10
 
-def get_correct_y(ts: list, threshold=0.05) -> int:
+def get_correct_y(ts: list, threshold=0.06) -> int:
     """
     Correctly classifies the time series for a bacterial fiber
     Classifies it using the second derivative test and the 
