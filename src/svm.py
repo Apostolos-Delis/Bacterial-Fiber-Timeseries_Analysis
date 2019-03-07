@@ -40,6 +40,9 @@ def train_model(verbose=True, training_percentage=0.8,
 
     X_train, Y_train, X_test, Y_test = data_gen.train_test_split(training_percentage)
 
+    X_train = np.mean(X_train, axis=1)
+    X_test = np.mean(X_test, axis=1)
+
     if verbose:
         print("Loaded {0} examples.".format(X_train.shape[0]))
         print("Data Ready, beginning to train...")

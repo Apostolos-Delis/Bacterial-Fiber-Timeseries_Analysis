@@ -18,3 +18,4 @@ data/images/
 data/images_unclassified/
 data/numpy/*
 data/models/*
+data/numpy_old/*
