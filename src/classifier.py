@@ -52,6 +52,8 @@ class Classifier:
         for color in lines.keys():
             for line in lines[color]:
                 plt.axvline(x=line, color=color)
+        plt.xlabel("TODO complete the plotting", fontsize=16)
+        plt.ylabel('Loss', fontsize=16)
         plt.savefig(file_name)
         plt.close()
 
