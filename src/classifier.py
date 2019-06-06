@@ -17,7 +17,7 @@ class Classifier:
 
     def __init__(self, classifier=None, gen_derivatives=False):
         """
-        :param classifier: func of the classifying function that will take in a 
+        :param classifier: func of the classifying function that will take in a
                            time series as a list or pd.Series and return a bool
         """
         self._classifier = classifier
@@ -32,12 +32,12 @@ class Classifier:
             return "Classifier Object <{0}> with no classifier".format(hex(id(self)))
 
 
-    
+
     def save_image(self, time_series, file_name: str, lines: dict):
         """
         Generates the first and second derivative, generates the graphs,
         and then saves the graph to IMAGE_DIR/filename
-        Also adds a line where the current classifier 
+        Also adds a line where the current classifier
 
         :param time_series: either a list or a np.array that will be
         """
@@ -52,8 +52,8 @@ class Classifier:
         for color in lines.keys():
             for line in lines[color]:
                 plt.axvline(x=line, color=color)
-        plt.xlabel("TODO complete the plotting", fontsize=16)
-        plt.ylabel('Loss', fontsize=16)
+        plt.xlabel("Image Number", fontsize=16)
+        plt.ylabel('Normalized Intensity', fontsize=16)
         plt.savefig(file_name)
         plt.close()
 
@@ -62,7 +62,7 @@ class Classifier:
         """
         Runs the classifier function on all the filters in the file_name
         :param file_name: the file_name in the form of %d-%d-%d-[uv|blue].mat
-        :rtype: pd.Series of all the 
+        :rtype: pd.Series of all the
         """
         mat = load_from_mat(file_name)
         data = process_mat(mat)
@@ -76,7 +76,7 @@ class Classifier:
     def create_image_directory(self, directory_name: str, limit: int = 100, verbose: bool = True):
         """
         Creates an image directory structured like this:
-        
+
         IMAGE_DIR/directory_name {
             FILE_1 {
                 FILTER_1.png
@@ -87,10 +87,10 @@ class Classifier:
                 ...
             }
         }
-        
+
         Where each png file is a graph of a time series of an individual filter, along with
         its first and second derivatives.
-        
+
         :param directory_name: name that the directory will be called inside the IMAGE_DIR
         :param verbose: bool for whether to print the progress made in creating the images
         """
@@ -107,10 +107,10 @@ class Classifier:
                     .format(mat_file, m+1, len(os.listdir(DATA_DIR)[:limit])))
             mat = load_from_mat(mat_file)
             data = process_mat(mat)
-            image_name = mat_file.split('.')[-2] 
+            image_name = mat_file.split('.')[-2]
             make_directory(path.join(directory_name, image_name))
             for i, ts in enumerate(data):
-                ts_name = path.join(directory_name, 
+                ts_name = path.join(directory_name,
                         path.join(image_name, "filter_{0}.png".format(i)))
 
                 # Find the point where the graph is classified at so it can be added as a line
@@ -124,12 +124,12 @@ class Classifier:
                 if verbose and (i+1) % 10 == 0:
                     print("Processing fiber: {0}/{1}"
                         .format(i+1, len(data)))
-            if verbose: 
+            if verbose:
                 print("Finished processing {0}...\n".format(mat_file))
 
 
     @staticmethod
-    def compare(classifier_1, classifier_2, directory_name: str, 
+    def compare(classifier_1, classifier_2, directory_name: str,
                 save_images=True, verbose=True, limit=1000,
                 ignore_blue=True):
         """
@@ -143,7 +143,7 @@ class Classifier:
         :param save_images: whether to save the images or not
         :param verbose: display the progress report
         :param limit: how many matlab files at max to compare
-        :param ignore_blue: bool for whether to test against 
+        :param ignore_blue: bool for whether to test against
                             blue light data
         """
         directory_name = path.join(IMAGE_DIR, directory_name)
@@ -153,7 +153,7 @@ class Classifier:
             make_directory(IMAGE_DIR)
 
         plotter = Classifier(None, gen_derivatives=True)
-        
+
         classifier_1_vals = []
         classifier_2_vals = []
         for m, mat_file in enumerate(os.listdir(DATA_DIR)[:limit]):
@@ -167,16 +167,17 @@ class Classifier:
 
             mat = load_from_mat(mat_file)
             data = process_mat(mat)
-            image_name = mat_file.split('.')[-2] 
+            image_name = mat_file.split('.')[-2]
             if save_images:
                 make_directory(path.join(directory_name, image_name))
 
             for i, ts in enumerate(data):
-                ts_name = path.join(directory_name, 
+                ts_name = path.join(directory_name,
                         path.join(image_name, "filter_{0}.png".format(i)))
 
                 lines = {'r': [], 'b': []}
                 classifying_point_1 = classify_ts(ts, classifier_1, window_size=10)
+
                 if classifying_point_1 != -1:
                     classifier_1_vals.append(classifying_point_1)
                     lines['r'].append(classifying_point_1)
@@ -201,12 +202,12 @@ class Classifier:
                 if verbose and (i+1) % 10 == 0:
                     print("Processing fiber: {0}/{1}"
                         .format(i+1, len(data)))
-            if verbose: 
+            if verbose:
                 print("Finished processing {0}...\n".format(mat_file))
 
         if verbose:
             print("Generating Classification Report..")
-        
+
         classifier_1_vals = np.array(classifier_1_vals)
         average_1 = np.average(classifier_1_vals)
         classifier_2_vals = np.array(classifier_2_vals)
@@ -217,7 +218,7 @@ class Classifier:
         print("----------------------------")
         print("Average of {0}: ".format(classifier_2.__name__))
         print("Average of {0} over {1} items".format(average_2, classifier_2_vals.size))
-        
+
 
 if __name__ == "__main__":
     from derivative import series_threshold, percentage_threshold
@@ -226,13 +227,13 @@ if __name__ == "__main__":
 
     directory_name = "svm_classifier_vs_standard_threshold"
     # Classifier.compare(svm_classifier,
-                    # percentage_threshold,
-                    # directory_name,
-                    # save_images=False,
-                    # limit=100,
-                    # verbose=False,
-                    # ignore_blue=True)
-    
-    test = Classifier(percentage_threshold, gen_derivatives=True)
+                       # percentage_threshold,
+                       # directory_name,
+                       # save_images=True,
+                       # limit=1,
+                       # verbose=False,
+                       # ignore_blue=True)
 
-    test.create_image_directory("rbf_kernel", limit=1)
+    test = Classifier(series_threshold, gen_derivatives=True)
+
+    test.create_image_directory("second_deriv_test", limit=1)

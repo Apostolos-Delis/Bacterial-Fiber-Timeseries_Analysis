@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# coding: utf8 
+# coding: utf8
 import numpy as np
 import pickle
 import matplotlib.pyplot as plt
@@ -20,14 +20,14 @@ from data_class import DataGenerator
 from constants import MODEL_DIR
 
 
-def train_model(verbose=True, training_percentage=0.8, 
+def train_model(verbose=True, training_percentage=0.8,
         plot_roc=False, save_model=True, svm_kernel='rbf'):
     """
     Trains the logistic regression model.
 
     :param verbose: bool for whether to display progress reports
-    :training_percentage: float from 0 to 1 of what percent of the 
-                          data will be use for training purposes as 
+    :training_percentage: float from 0 to 1 of what percent of the
+                          data will be use for training purposes as
                           opposed to testing
     :param plot_roc: bool for whether to display ROC curves for the model
     :param save_mode: bool for whether to save the trained model
@@ -46,6 +46,7 @@ def train_model(verbose=True, training_percentage=0.8,
     if verbose:
         print("Loaded {0} examples.".format(X_train.shape[0]))
         print("Data Ready, beginning to train...")
+    exit(0)
 
 
     svm_classifier = svm.SVC(kernel=svm_kernel, gamma="scale", verbose=verbose)
@@ -59,7 +60,7 @@ def train_model(verbose=True, training_percentage=0.8,
     if verbose:
         print("Printing Confusion Matrix:")
     print(confusion_matrix, end="\n\n")
-    
+
     if verbose:
         print("Displaying Classification Report:")
     print(classification_report(Y_test, Y_pred))
@@ -92,7 +93,7 @@ def train_model(verbose=True, training_percentage=0.8,
 def serialize_model(file_name: str, model):
     """
     Serialize the SVM model using pickle
-    
+
     :param file_name: the name of the file of the model
     :param model: the sklearn logistic regression model
     """
@@ -108,7 +109,7 @@ def load_model(file_name: str, full_path: bool = False):
     :param file_name: the name of the file of the model
     :param full_path: bool on whether or not the file_name
                      is an absolute or relative path
-    :returns the model stored in the file_name 
+    :returns the model stored in the file_name
     """
     if not full_path:
         file_name = path.join(MODEL_DIR, file_name)
@@ -122,7 +123,7 @@ def load_model(file_name: str, full_path: bool = False):
 def svm_classifier(ts: list) -> bool:
     """
     Returns true or false based on whether the support vector machine
-    returns 1 or 0 with ts as the input data 
+    returns 1 or 0 with ts as the input data
 
     :param ts: list of time series to be classified
     """
@@ -134,8 +135,10 @@ def svm_classifier(ts: list) -> bool:
 
     latest_file = max(list_of_files, key=path.getctime)
     classifier = load_model(latest_file, full_path=True)
-    ts = np.mean(ts, axis=1)
+    ts = np.mean(ts, axis=0)
     try:
+        prediction = classifier.predict(ts)
+        print(prediction)
         prediction = int(np.array(classifier.predict(ts)).reshape(1)[0])
     except ValueError:
         prediction = int(np.array(classifier.predict([ts])).reshape(1)[0])
@@ -144,6 +147,5 @@ def svm_classifier(ts: list) -> bool:
 
 if __name__ == "__main__":
     kernel='rbf'
-    train_model(verbose=True, training_percentage=0.8, 
+    train_model(verbose=True, training_percentage=0.8,
         plot_roc=False, save_model=True, svm_kernel=kernel)
-
